@@ -1,0 +1,73 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button, 
+button:active, 
+button:focus,
+input,
+audio {
+  outline: none;
+}
+  
+body{
+    font-family: 'Noto Serif', serif;
+    /*background: url("images/image.jpg") center no-repeat;
+    background-size:cover;*/
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+
+.game_field {
+    display: grid;
+    grid-template-columns: 320px 200px;
+    
+}
+
+.game_board{
+    border: 2px solid black;
+    background-color: burlywood;
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.play-button {
+    background-color: burlywood;
+    font-size: 16px;
+    width: 100px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+
+/*game control*/
+
+.game_control {
+    display: flex;
+    flex-flow: row wrap;
+    margin-top: 10px;
+    width: 100px;
+}
+
+.up {
+    flex: 100%;
+    width: 50px;
+}
+
+.middle{
+    flex: 50%;
+}
+
+.down {
+    flex: 100%;
+}
+

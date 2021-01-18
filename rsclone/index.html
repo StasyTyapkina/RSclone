@@ -3,10 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RS Clone</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/9fa8ad2c91.js" crossorigin="anonymous"></script>
+    <title>RS Clone</title>
 </head>
 <body>
+
+    <div class="game_field">
+        <canvas id="canvas" class="game_board"></canvas>
+
+        <div class="right-column">
+          <div class="game_info">
+            <canvas class="next_piece"></canvas>
+            <p>Score: <span id="score">0</span></p>
+            <p>Time: <span id="time">0</span></p>        
+            <p>Level: <span id="level">0</span></p>
+          </div>
+
+          <button class="play-button">Play</button>
+
+          <div class="game_control">
+            <button class="up"><i class="fas fa-arrow-alt-circle-up"></i></button>
+            <button class="middle left"><i class="fas fa-arrow-alt-circle-left"></i></button>
+            <button class="middle right"><i class="fas fa-arrow-alt-circle-right"></i></button>
+            <button class="down"><i class="fas fa-arrow-alt-circle-down down"></i></button>           
+          </div>
+          
+        </div>
+    </div>
+
+
    <script src="app/bundle.js"></script>    
 </body>
 </html>
