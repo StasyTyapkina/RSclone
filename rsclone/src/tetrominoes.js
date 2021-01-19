@@ -30,4 +30,16 @@ export default class Tetromino {
     this.shape = TETROMINOES[randomIndex];
     this.color = COLORS[randomIndex];
   }
+
+  rotateTetromino() {
+    const result = [];
+    for (let i = 0; i < this.shape[0].length; i++) {
+      const row = this.shape.map((e) => e[i]).reverse();
+      result.push(row);
+    }
+    this.shape = result;
+  }
+
+  
+
 }

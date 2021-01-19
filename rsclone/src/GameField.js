@@ -36,17 +36,28 @@ export default class GameField {
     this.left.addEventListener('click', () => {
       this.changeCoordinates(-1, 0);
     });
+
     this.right.addEventListener('click', () => {
       this.changeCoordinates(1, 0);
     });
+
     this.down.addEventListener('click', () => {
       this.changeCoordinates(0, 1);
+    });
+
+    this.up.addEventListener('click', () => {
+      this.tetromino.rotateTetromino();
+      this.drawNewPosition();
     });
 
     document.addEventListener('keydown', (e) => {
       e.preventDefault();
       if (e.which === 37) {
         this.changeCoordinates(-1, 0);
+      }
+      if (e.which === 38) {
+        this.tetromino.rotateTetromino();
+        this.drawNewPosition();
       }
       if (e.which === 39) {
         this.changeCoordinates(1, 0);
@@ -64,10 +75,29 @@ export default class GameField {
   }
 
   changeCoordinates(x, y) {
-    this.tetromino.x += x;
-    this.tetromino.y += y;
+    let isValid = true;
+    this.tetromino.shape.forEach((row, dy) => {
+      row.forEach((value, dx) => {
+        if (!this.isTetroInsideWalls(this.tetromino.x + dx + x, this.tetromino.y + dy + y)) {
+          isValid = false;
+        }
+      });
+    });
+    if (isValid) {
+      this.tetromino.x += x;
+      this.tetromino.y += y;
+    }
+
+    this.drawNewPosition();
+  }
+
+  drawNewPosition() {
     this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
     this.tetromino.drawTetromino();
+  }
+
+  isTetroInsideWalls(x, y) {
+    return x >= 0 && x < COLS && y <= ROWS;
   }
 
   resetTime() {
