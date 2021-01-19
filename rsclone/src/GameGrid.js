@@ -1,11 +1,9 @@
-
+/* eslint-disable no-plusplus */
 import { COLS, ROWS } from './constants';
 
 export default class GameGrid {
   constructor() {
     this.createGrid();
-    console.table(this.grid)
-    
   }
 
   createGrid() {

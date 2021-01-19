@@ -20,6 +20,7 @@ export default class Tetromino {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
@@ -29,5 +30,4 @@ export default class Tetromino {
     this.shape = TETROMINOES[randomIndex];
     this.color = COLORS[randomIndex];
   }
-
 }

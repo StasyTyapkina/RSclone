@@ -1,1 +1,1 @@
-import GameField from './GameField.js';
+import GameField from './GameField';
