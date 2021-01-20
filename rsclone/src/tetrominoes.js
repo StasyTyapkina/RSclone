@@ -39,7 +39,4 @@ export default class Tetromino {
     }
     this.shape = result;
   }
-
-  
-
 }

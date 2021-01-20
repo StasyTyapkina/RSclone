@@ -78,7 +78,8 @@ export default class GameField {
     let isValid = true;
     this.tetromino.shape.forEach((row, dy) => {
       row.forEach((value, dx) => {
-        if (!this.isTetroInsideWalls(this.tetromino.x + dx + x, this.tetromino.y + dy + y)) {
+        if (!this.isTetroInsideWalls(this.tetromino.x + dx + x, this.tetromino.y + dy + y)
+            && !this.notOccupied(this.tetromino.x + dx, this.tetromino.y + dy)) {
           isValid = false;
         }
       });
@@ -98,6 +99,10 @@ export default class GameField {
 
   isTetroInsideWalls(x, y) {
     return x >= 0 && x < COLS && y <= ROWS;
+  }
+
+  notOccupied(x, y) {
+    return this.gameGridLogic.grid[y] && this.gameGridLogic.grid[y][x] === 0;
   }
 
   resetTime() {
