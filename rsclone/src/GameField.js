@@ -14,7 +14,7 @@ export default class GameField {
 
     this.gameOver = false;
 
-    this.gameGridLogic = new GameGrid();
+    this.gameGridLogic = new GameGrid(this.context);
 
     const playBttn = document.querySelector('.play_button');
     playBttn.addEventListener('click', () => {
@@ -52,18 +52,34 @@ export default class GameField {
 
     document.addEventListener('keydown', (e) => {
       e.preventDefault();
-      if (e.which === 37) {
-        this.changeCoordinates(-1, 0);
+      if (e.which === 37 ) {
+        if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col - 1)) {
+          this.tetromino.col -= 1;
+        }
+        this.drawNewPosition();
       }
       if (e.which === 38) {
         this.tetromino.rotateTetromino();
+        if (!this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col)) {
+          return;
+        }
         this.drawNewPosition();
       }
       if (e.which === 39) {
-        this.changeCoordinates(1, 0);
+        if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col + 1)) {
+          this.tetromino.col += 1;
+        }
+        this.drawNewPosition();
       }
       if (e.which === 40) {
-        this.changeCoordinates(0, 1);
+        const row = this.tetromino.row + 1;
+        if (!this.isValidMove(this.tetromino.shape, row, this.tetromino.col)) {
+          this.tetromino.row = row - 1;
+          //проверить
+          return;
+        }
+        this.tetromino.row = row;
+        this.drawNewPosition();
       }
     });
   } // end constructor
@@ -74,35 +90,24 @@ export default class GameField {
     this.tetromino.drawTetromino();
   }
 
-  changeCoordinates(x, y) {
-    let isValid = true;
-    this.tetromino.shape.forEach((row, dy) => {
-      row.forEach((value, dx) => {
-        if (!this.isTetroInsideWalls(this.tetromino.x + dx + x, this.tetromino.y + dy + y)
-            && !this.notOccupied(this.tetromino.x + dx, this.tetromino.y + dy)) {
-          isValid = false;
+  isValidMove(matrix, gridRow, gridCol) {
+    for (let row = 0; row < matrix.length; row++) {
+      for (let col = 0; col < matrix[row].length; col++) {
+        if (matrix[row][col] && (
+          gridCol + col < 0
+          || gridCol + col >= this.gameGridLogic.grid[0].length
+          || gridRow + row >= this.gameGridLogic.grid.length
+          || this.gameGridLogic.grid[gridRow + row][gridCol + col])) {
+          return false;
         }
-      });
-    });
-    if (isValid) {
-      this.tetromino.x += x;
-      this.tetromino.y += y;
+      }
     }
-
-    this.drawNewPosition();
+    return true;
   }
 
   drawNewPosition() {
     this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
     this.tetromino.drawTetromino();
-  }
-
-  isTetroInsideWalls(x, y) {
-    return x >= 0 && x < COLS && y <= ROWS;
-  }
-
-  notOccupied(x, y) {
-    return this.gameGridLogic.grid[y] && this.gameGridLogic.grid[y][x] === 0;
   }
 
   resetTime() {

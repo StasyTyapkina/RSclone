@@ -1,12 +1,11 @@
-import { TETROMINOES, COLORS } from './constants';
+import { TETROMINOES, COLORS, COLS } from './constants';
 
 export default class Tetromino {
   constructor(context) {
     this.context = context;
+    this.tetrominoOrder = [];
     this.extractTetromino();
-
-    this.x = 3;
-    this.y = 0;
+    this.tetrominoObj = this.getNextTetromino();
   }
 
   drawTetromino() {
@@ -14,7 +13,7 @@ export default class Tetromino {
     this.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value > 0) {
-          this.context.fillRect(this.x + x, this.y + y, 1, 1);
+          this.context.fillRect(this.col + x, this.row + y, 1, 1);
         }
       });
     });
@@ -26,9 +25,32 @@ export default class Tetromino {
   }
 
   extractTetromino() {
-    const randomIndex = this.getRandomInt(0, TETROMINOES.length - 1);
-    this.shape = TETROMINOES[randomIndex];
-    this.color = COLORS[randomIndex];
+    const order = ['I', 'J', 'L', 'O', 'S', 'Z', 'T'];
+
+    while (order.length) {
+      const randomIndex = this.getRandomInt(0, order.length - 1);
+      const tetrominoName = order.splice(randomIndex, 1)[0];
+      this.tetrominoOrder.push(tetrominoName);
+    }
+  }
+
+  getNextTetromino() {
+    if (this.tetrominoOrder.length === 0) {
+      this.extractTetromino();
+    }
+    const tetrominoName = this.tetrominoOrder.pop();
+    this.shape = TETROMINOES[tetrominoName];
+    this.color = COLORS[tetrominoName];
+    this.col = COLS / 2 - Math.round(this.shape[0].length / 2);
+    this.row = 0;
+
+    return {
+      tetrominoName,
+      shape: this.shape,
+      color: this.color,
+      row: this.row,
+      col: this.col,
+    };
   }
 
   rotateTetromino() {
