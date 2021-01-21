@@ -8,18 +8,23 @@ export default class GameField {
     this.canvas = document.getElementById('canvas');
     this.context = this.canvas.getContext('2d');
 
-    this.context.canvas.width = COLS * BLOCK_SIZE;
-    this.context.canvas.height = ROWS * BLOCK_SIZE;
+    this.canvas.width = COLS * BLOCK_SIZE;
+    this.canvas.height = ROWS * BLOCK_SIZE;
     this.context.scale(BLOCK_SIZE, BLOCK_SIZE);
 
     this.gameOver = false;
+    this.requestAF = null;
+    this.time = {
+      start: 0,
+      elapsed: 0,
+      level: 1000,
+    };
 
     this.gameGridLogic = new GameGrid(this.context);
 
     const playBttn = document.querySelector('.play_button');
     playBttn.addEventListener('click', () => {
       this.playGame();
-      this.resetTime();
     });
 
     this.timer = document.getElementById('timer');
@@ -75,7 +80,7 @@ export default class GameField {
         const row = this.tetromino.row + 1;
         if (!this.isValidMove(this.tetromino.shape, row, this.tetromino.col)) {
           this.tetromino.row = row - 1;
-          //проверить
+          // проверить
           return;
         }
         this.tetromino.row = row;
@@ -84,10 +89,22 @@ export default class GameField {
     });
   } // end constructor
 
+  gameLoop(now = 0) {
+    this.time.elapsed = now - this.time.start;
+    if (this.time.elapsed > this.time.level) {
+      this.tetromino.row++;
+      this.time.start = now;
+    }
+    this.requestAF = requestAnimationFrame(this.gameLoop.bind(this));
+    this.drawNewPosition();
+  }
+
   playGame() {
     this.tetromino = new Tetromino(this.context);
     this.gameGridLogic.createGrid();
     this.tetromino.drawTetromino();
+    this.resetTime();
+    this.gameLoop();
   }
 
   isValidMove(matrix, gridRow, gridCol) {
@@ -106,7 +123,7 @@ export default class GameField {
   }
 
   drawNewPosition() {
-    this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.tetromino.drawTetromino();
   }
 

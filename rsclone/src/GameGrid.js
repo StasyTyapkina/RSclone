@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import { COLS, ROWS } from './constants';
 
 export default class GameGrid {

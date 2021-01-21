@@ -16,7 +16,7 @@ export default class Tetromino {
     this.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value > 0) {
-          this.context.fillRect(this.col + x, this.row + y, 0.98, 0.98);
+          this.context.fillRect(this.col + x, this.row + y, 0.97, 0.97);
         }
       });
     });

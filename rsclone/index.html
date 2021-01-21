@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/9fa8ad2c91.js" crossorigin="anonymous"></script>
     <title>RS Clone</title>
 </head>
 <body>
-
+ 
+  <main>
     <div class="game_field">
         <canvas id="canvas" class="game_board"></canvas>
-
         <div class="right-column">
+
           <div class="game_info">
             <canvas class="next_piece"></canvas>
-            <p>Score: <span id="score">0</span></p>
-            <p>Time: <span id="timer">00:00:00</span></p>        
-            <p>Level: <span id="level">0</span></p>
+            <p><b>Score:</b> <span id="score">0</span></p>
+            <p><b>Time:</b> <span id="timer">00:00:00</span></p>        
+            <p><b>Level:</b> <span id="level">0</span></p>
           </div>
 
           <button class="play_button">Play</button>
@@ -31,7 +34,20 @@
           
         </div>
     </div>
+  </main>
 
+    <footer class="footer">
+      <div class="links">
+          <a href="https://github.com/StasyTyapkina" target="_blank">
+              <img src="./src/img/GitHub.png" alt="github_logo" class="github_logo">
+          </a>
+          <a href="https://rs.school/index.html" target="_blank" >
+              <img src="./src/img/rs_school_logo.svg" alt="rs_logo" class="rs_logo">
+          </a>
+      </div>
+      <p class="copyright">© 2021</p>
+  </footer>
+  
 
    <script src="app/bundle.js"></script>    
 </body>
