@@ -9,11 +9,14 @@ export default class Tetromino {
   }
 
   drawTetromino() {
-    this.context.fillStyle = this.color;
+    const gradient = this.context.createLinearGradient(15, 0, 5, 20);
+    gradient.addColorStop(0, 'white');
+    gradient.addColorStop(1, this.color);
+    this.context.fillStyle = gradient;
     this.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value > 0) {
-          this.context.fillRect(this.col + x, this.row + y, 1, 1);
+          this.context.fillRect(this.col + x, this.row + y, 0.98, 0.98);
         }
       });
     });

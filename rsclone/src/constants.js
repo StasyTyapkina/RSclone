@@ -44,9 +44,9 @@ export const TETROMINOES = {
 export const COLORS = {
   I: 'cyan',
   J: 'blue',
-  L: 'orange',
+  L: 'orangeRed',
   O: 'yellow',
-  S: 'green',
+  S: 'limeGreen',
   Z: 'red',
-  T: 'purple',
+  T: 'fuchsia',
 };

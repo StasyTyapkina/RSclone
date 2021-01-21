@@ -50,28 +50,28 @@ export default class GameField {
       this.drawNewPosition();
     });
 
-    document.addEventListener('keydown', (e) => {
-      e.preventDefault();
-      if (e.which === 37 ) {
+    document.addEventListener('keydown', (event) => {
+      event.preventDefault();
+      if (event.code === 'ArrowLeft') {
         if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col - 1)) {
           this.tetromino.col -= 1;
         }
         this.drawNewPosition();
       }
-      if (e.which === 38) {
+      if (event.code === 'ArrowUp') {
         this.tetromino.rotateTetromino();
         if (!this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col)) {
           return;
         }
         this.drawNewPosition();
       }
-      if (e.which === 39) {
+      if (event.code === 'ArrowRight') {
         if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col + 1)) {
           this.tetromino.col += 1;
         }
         this.drawNewPosition();
       }
-      if (e.which === 40) {
+      if (event.code === 'ArrowDown') {
         const row = this.tetromino.row + 1;
         if (!this.isValidMove(this.tetromino.shape, row, this.tetromino.col)) {
           this.tetromino.row = row - 1;

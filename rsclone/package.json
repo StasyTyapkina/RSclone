@@ -24,9 +24,8 @@
   "dependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/index.js",
-    "build": "./node_modules/.bin/webpack",
-    "dev": "./node_modules/.bin/webpack --watch"
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack-dev-server --history-api-fallback --inline --open"
   },
   "keywords": [],
   "license": "ISC"
