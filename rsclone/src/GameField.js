@@ -12,7 +12,7 @@ export default class GameField {
     this.canvas.height = ROWS * BLOCK_SIZE;
     this.context.scale(BLOCK_SIZE, BLOCK_SIZE);
 
-    this.requestAF = null;
+    this.requestID = null;
     this.gameOver = false;
 
     this.time = {
@@ -97,7 +97,10 @@ export default class GameField {
     this.gameGridLogic.grid.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value !== 0) {
-          this.context.fillStyle = this.tetromino.color;
+          // если прописать this.context.fillStyle = this.tetromino.color
+          // будет прикольный эффект смены цветов всего поля
+
+          this.context.fillStyle = value;
           this.context.fillRect(x, y, 0.97, 0.97);
         }
       });
@@ -108,8 +111,10 @@ export default class GameField {
     for (let row = 0; row < this.tetromino.shape.length; row++) {
       for (let col = 0; col < this.tetromino.shape[row].length; col++) {
         if (this.tetromino.shape[row][col]) {
-          if (this.tetromino.row + row < 0) {
-            return this.showGameOver();
+          if (this.tetromino.row + row <= 0) {
+            this.gameOver = true;
+            this.showGameOver();
+            return;
           }
           if (this.tetromino.shape[row][col] !== 0) {
             this.gameGridLogic.grid[this.tetromino.row + row][this.tetromino.col + col] = this.tetromino.color;
@@ -132,8 +137,11 @@ export default class GameField {
       }
     }
 
-    this.drawNewPosition();
-    this.requestAF = requestAnimationFrame(this.gameLoop.bind(this));
+    
+    if (this.gameOver !== true) {
+      this.drawNewPosition();
+      this.requestID = requestAnimationFrame(this.gameLoop.bind(this));
+    }
   }
 
   playGame() {
@@ -206,17 +214,13 @@ export default class GameField {
   }
 
   showGameOver() {
+    cancelAnimationFrame(this.requestID);
     this.gameOver = true;
-    cancelAnimationFrame(this.requestAF);
     this.context.fillStyle = 'black';
-    this.context.globalAlpha = 0.75;
-    this.context.fillRect(0, this.canvas.height / 2 - 30, this.canvas.width, 60);
-    this.context.globalAlpha = 1;
+    this.context.fillRect(1, 3, 8, 1.2);
+    this.context.font = '1px Arial';
     this.context.fillStyle = 'white';
-    this.context.font = '36px monospace';
-    this.context.textAlign = 'center';
-    this.context.textBaseline = 'middle';
-    this.context.fillText('GAME OVER!', this.canvas.width / 2, this.canvas.height / 2);
+    this.context.fillText('GAME OVER', 1.8, 4);
   }
 }
 
