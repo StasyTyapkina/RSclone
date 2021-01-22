@@ -45,19 +45,35 @@ export default class GameField {
     this.down = document.querySelector('.down');
 
     this.left.addEventListener('click', () => {
-      this.changeCoordinates(-1, 0);
+      if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col - 1)) {
+        this.tetromino.col -= 1;
+      }
+      this.drawNewPosition();
     });
 
     this.right.addEventListener('click', () => {
-      this.changeCoordinates(1, 0);
+      if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col + 1)) {
+        this.tetromino.col += 1;
+      }
+      this.drawNewPosition();
     });
 
     this.down.addEventListener('click', () => {
-      this.changeCoordinates(0, 1);
+      const row = this.tetromino.row + 1;
+      if (!this.isValidMove(this.tetromino.shape, row, this.tetromino.col)) {
+        this.tetromino.row = row - 1;
+        this.freezeTetromino();
+        return;
+      }
+      this.tetromino.row = row;
+      this.drawNewPosition();
     });
 
     this.up.addEventListener('click', () => {
       this.tetromino.rotateTetromino();
+      if (!this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col)) {
+        return;
+      }
       this.drawNewPosition();
     });
 
@@ -94,6 +110,9 @@ export default class GameField {
         }
         this.tetromino.row = row;
         this.drawNewPosition();
+      }
+      if (event.code === 'Escape') {
+        this.playGame();
       }
     });
   } // end constructor
