@@ -23,11 +23,16 @@ export default class GameField {
 
     this.gameGridLogic = new GameGrid(this.context);
 
-    const playBttn = document.querySelector('.play_button');
-    playBttn.addEventListener('click', () => {
+    this.playBttn = document.querySelector('.play_button');
+    this.pauseBttn = document.querySelector('.pause_button');
+
+    this.playBttn.addEventListener('click', () => {
       this.playGame();
     });
 
+    this.pauseBttn.addEventListener('click', () => {
+      this.pauseGame();
+    });
     this.timer = document.getElementById('timer');
     setInterval(() => { this.tick(); }, 1000);
     this.hour = 0;
@@ -93,6 +98,37 @@ export default class GameField {
     });
   } // end constructor
 
+  playGame() {
+    this.tetromino = new Tetromino(this.context);
+    this.gameGridLogic.createGrid();
+    this.resetTime();
+    this.gameLoop();
+
+    this.playBttn.style.display = 'none';
+    this.pauseBttn.style.display = 'block';
+  }
+
+  isValidMove(matrix, gridRow, gridCol) {
+    for (let row = 0; row < matrix.length; row++) {
+      for (let col = 0; col < matrix[row].length; col++) {
+        if (matrix[row][col] && (
+          gridCol + col < 0
+          || gridCol + col >= this.gameGridLogic.grid[0].length
+          || gridRow + row >= this.gameGridLogic.grid.length
+          || this.gameGridLogic.grid[gridRow + row][gridCol + col])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  drawNewPosition() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.tetromino.drawTetromino();
+    this.drawGrid();
+  }
+
   drawGrid() {
     this.gameGridLogic.grid.forEach((row, y) => {
       row.forEach((value, x) => {
@@ -117,6 +153,7 @@ export default class GameField {
             return;
           }
           if (this.tetromino.shape[row][col] !== 0) {
+            // eslint-disable-next-line max-len
             this.gameGridLogic.grid[this.tetromino.row + row][this.tetromino.col + col] = this.tetromino.color;
           }
         }
@@ -137,39 +174,30 @@ export default class GameField {
       }
     }
 
-    
     if (this.gameOver !== true) {
       this.drawNewPosition();
       this.requestID = requestAnimationFrame(this.gameLoop.bind(this));
     }
   }
 
-  playGame() {
-    this.tetromino = new Tetromino(this.context);
-    this.gameGridLogic.createGrid();
-    this.resetTime();
-    this.gameLoop();
-  }
-
-  isValidMove(matrix, gridRow, gridCol) {
-    for (let row = 0; row < matrix.length; row++) {
-      for (let col = 0; col < matrix[row].length; col++) {
-        if (matrix[row][col] && (
-          gridCol + col < 0
-          || gridCol + col >= this.gameGridLogic.grid[0].length
-          || gridRow + row >= this.gameGridLogic.grid.length
-          || this.gameGridLogic.grid[gridRow + row][gridCol + col])) {
-          return false;
-        }
-      }
+  pauseGame() {
+    if (!this.requestID) {
+      this.playBttn.style.display = 'none';
+      this.pauseBttn.style.display = 'block';
+      this.gameLoop();
+      return;
     }
-    return true;
-  }
+    cancelAnimationFrame(this.requestID);
+    this.requestID = null;
 
-  drawNewPosition() {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.tetromino.drawTetromino();
-    this.drawGrid();
+    this.playBttn.style.display = 'block';
+    this.pauseBttn.style.display = 'none';
+
+    this.context.fillStyle = 'black';
+    this.context.fillRect(4, 6, 12, 1.2);
+    this.context.font = '1px Verdana';
+    this.context.fillStyle = 'red';
+    this.context.fillText('PAUSE', 3, 4);
   }
 
   resetTime() {
@@ -216,11 +244,13 @@ export default class GameField {
   showGameOver() {
     cancelAnimationFrame(this.requestID);
     this.gameOver = true;
+    this.playBttn.style.display = '';
+    this.pauseBttn.style.display = 'none';
     this.context.fillStyle = 'black';
-    this.context.fillRect(1, 3, 8, 1.2);
-    this.context.font = '1px Arial';
+    this.context.fillRect(4, 6, 12, 1.2);
+    this.context.font = '1px Verdana';
     this.context.fillStyle = 'white';
-    this.context.fillText('GAME OVER', 1.8, 4);
+    this.context.fillText('GAME OVER', 1.8, 7);
   }
 }
 
