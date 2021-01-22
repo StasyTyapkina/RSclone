@@ -80,7 +80,7 @@ export default class GameField {
         const row = this.tetromino.row + 1;
         if (!this.isValidMove(this.tetromino.shape, row, this.tetromino.col)) {
           this.tetromino.row = row - 1;
-          // проверить
+          this.freezeTetromino();
           return;
         }
         this.tetromino.row = row;
@@ -89,13 +89,50 @@ export default class GameField {
     });
   } // end constructor
 
+  drawGrid() {
+    for (let row = 0; row < 20; row++) {
+      for (let col = 0; col < 10; col++) {
+        if (this.gameGridLogic.grid[row][col]) {
+          this.context.fillStyle = this.tetromino.color;
+          this.context.fillRect(col, row, 30, 30);
+        }
+      }
+    }
+  }
+
+  freezeTetromino() {
+    for (let row = 0; row < this.tetromino.shape.length; row++) {
+      for (let col = 0; col < this.tetromino.shape[row].length; col++) {
+        if (this.tetromino.shape[row][col]) {
+          if (this.tetromino.row + row < 0) {
+            return this.showGameOver();
+          }
+          if (this.tetromino.shape[row][col] !== 0) {
+            this.gameGridLogic.grid[this.tetromino.row + row][this.tetromino.col + col] = this.tetromino.color;
+          }
+
+          console.table(this.gameGridLogic.grid);
+        }
+      }
+    }
+    this.tetromino.getNextTetromino();
+  }
+
   gameLoop(now = 0) {
     this.time.elapsed = now - this.time.start;
     if (this.time.elapsed > this.time.level) {
       this.tetromino.row++;
       this.time.start = now;
+
+      if (!this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col)) {
+        this.tetromino.row--;
+        this.freezeTetromino();
+      }
     }
+
     this.requestAF = requestAnimationFrame(this.gameLoop.bind(this));
+
+    this.drawGrid();
     this.drawNewPosition();
   }
 
@@ -170,6 +207,7 @@ export default class GameField {
 
   showGameOver() {
     this.gameOver = true;
+    cancelAnimationFrame(this.requestAF);
     this.context.fillStyle = 'black';
     this.context.globalAlpha = 0.75;
     this.context.fillRect(0, this.canvas.height / 2 - 30, this.canvas.width, 60);

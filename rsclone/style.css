@@ -23,6 +23,7 @@ a:visited{
 
     --color-black: #000000;
     --color-grey: #545454;
+    --color-grey-light: #acacac;
     --color-light: #FFFFFF;
     --color-blue-light:#0000ff7a;;
 
@@ -63,6 +64,9 @@ body{
     margin-top: 10px;
 }
 
+.play_button:hover{
+    background-color: var(--color-grey-light);
+}
 /*game control*/
 
 .game_control {
@@ -91,7 +95,6 @@ body{
 .footer{
     display: flex;
     justify-content: center;
-    
 }
 
 .github_logo, .rs_logo {
@@ -102,4 +105,5 @@ body{
 
 .copyright{
     align-self: center;
+    font-size: 12px;
 }

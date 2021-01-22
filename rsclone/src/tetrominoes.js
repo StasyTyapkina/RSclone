@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import { TETROMINOES, COLORS, COLS } from './constants';
 
 export default class Tetromino {
