@@ -13,7 +13,8 @@ export default class Tetromino {
     const gradient = this.context.createLinearGradient(15, 0, 5, 20);
     gradient.addColorStop(0, 'white');
     gradient.addColorStop(1, this.color);
-    this.context.fillStyle = gradient;
+    //this.context.fillStyle = gradient;
+    this.context.fillStyle = this.color;
     this.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value > 0) {

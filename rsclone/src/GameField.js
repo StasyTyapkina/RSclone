@@ -12,8 +12,9 @@ export default class GameField {
     this.canvas.height = ROWS * BLOCK_SIZE;
     this.context.scale(BLOCK_SIZE, BLOCK_SIZE);
 
-    this.gameOver = false;
     this.requestAF = null;
+    this.gameOver = false;
+
     this.time = {
       start: 0,
       elapsed: 0,
@@ -28,10 +29,10 @@ export default class GameField {
     });
 
     this.timer = document.getElementById('timer');
+    setInterval(() => { this.tick(); }, 1000);
     this.hour = 0;
     this.min = 0;
     this.sec = 0;
-    setInterval(() => { this.tick(); }, 1000);
 
     this.up = document.querySelector('.up');
     this.left = document.querySelector('.left');
@@ -57,6 +58,9 @@ export default class GameField {
 
     document.addEventListener('keydown', (event) => {
       event.preventDefault();
+
+      if (this.gameOver) return;
+
       if (event.code === 'ArrowLeft') {
         if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col - 1)) {
           this.tetromino.col -= 1;
@@ -90,14 +94,14 @@ export default class GameField {
   } // end constructor
 
   drawGrid() {
-    for (let row = 0; row < 20; row++) {
-      for (let col = 0; col < 10; col++) {
-        if (this.gameGridLogic.grid[row][col]) {
+    this.gameGridLogic.grid.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
           this.context.fillStyle = this.tetromino.color;
-          this.context.fillRect(col, row, 30, 30);
+          this.context.fillRect(x, y, 0.97, 0.97);
         }
-      }
-    }
+      });
+    });
   }
 
   freezeTetromino() {
@@ -110,8 +114,6 @@ export default class GameField {
           if (this.tetromino.shape[row][col] !== 0) {
             this.gameGridLogic.grid[this.tetromino.row + row][this.tetromino.col + col] = this.tetromino.color;
           }
-
-          console.table(this.gameGridLogic.grid);
         }
       }
     }
@@ -130,16 +132,13 @@ export default class GameField {
       }
     }
 
-    this.requestAF = requestAnimationFrame(this.gameLoop.bind(this));
-
-    this.drawGrid();
     this.drawNewPosition();
+    this.requestAF = requestAnimationFrame(this.gameLoop.bind(this));
   }
 
   playGame() {
     this.tetromino = new Tetromino(this.context);
     this.gameGridLogic.createGrid();
-    this.tetromino.drawTetromino();
     this.resetTime();
     this.gameLoop();
   }
@@ -162,6 +161,7 @@ export default class GameField {
   drawNewPosition() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.tetromino.drawTetromino();
+    this.drawGrid();
   }
 
   resetTime() {
