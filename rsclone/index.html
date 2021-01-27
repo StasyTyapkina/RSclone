@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="./src/img/favicon.ico" type="image/x-icon">
     <script src="https://kit.fontawesome.com/9fa8ad2c91.js" crossorigin="anonymous"></script>
     <title>RS Clone</title>
 </head>
@@ -13,40 +14,60 @@
   <main>
     <div class="game_field">
         <canvas id="canvas" class="game_board"></canvas>
-
         <div class="right-column">
-          <i class="far fa-question-circle" data-tooltip="jfnskgnl eigjiel j irghg oejg irgj ejig jfnskgnl eigjiel j irghg oejg irgj ejig"></i>
+
+          <button class="modal_bttn"><i class="far fa-question-circle"></i></button>
+          <div class="modal_container"> 
+            <div class="modal_content">
+              <div class="modal_header">
+                <span class="close_bttn">×</span>
+                <h2>Welcome to TETRIS!</h2>
+              </div>
+              <div class="modal_main">
+                <h3>Приветствую тебя, дорогой игрок!</h3>
+                <p>Для управления тетрамино ты можешь использовать клавиатуру: <br>
+                   ↑ перевернуть фигуру <br>
+                  ← → движение влево / вправо <br>
+                   ↓ ускорение падения <br>
+                   Esc - пауза <br>
+                   или воспользоваться кнопками управления на твоем экране. 
+                </p>
+              </div>
+              <div class="modal_footer">
+                <video controls class="video">
+                  <source src="./src/img/t_video.mp4" type="video/mp4">     
+                </video>
+              </div>
+            </div>
+          </div>
+
           <div class="game_info">
             <canvas class="next_piece"></canvas>
             <p><b>Score:</b> <span id="score">0</span></p>
             <p><b>Time:</b> <span id="timer">00:00:00</span></p>        
             <p><b>Level:</b> <span id="level">0</span></p>
           </div>
-
           <button class="play_button bttn">Play</button> 
-          
           <button class="pause_button bttn">Pause</button>
-
           <div class="game_control">
             <button class="up"><i class="fas fa-arrow-alt-circle-up"></i></button>
             <button class="middle left"><i class="fas fa-arrow-alt-circle-left"></i></button>
             <button class="middle right"><i class="fas fa-arrow-alt-circle-right"></i></button>
             <button class="down"><i class="fas fa-arrow-alt-circle-down down" ></i></button>           
           </div>
-    
         </div>
-    </div>
-  </main>
-    <footer class="footer">
-      <div class="links">
-          <a href="https://github.com/StasyTyapkina" target="_blank">
-              <img src="./src/img/GitHub.png" alt="github_logo" class="github_logo">
-          </a>
-          <a href="https://rs.school/index.html" target="_blank" >
-              <img src="./src/img/rs_school_logo.svg" alt="rs_logo" class="rs_logo">
-          </a>
       </div>
-      <p class="copyright">Created by A.Tyapkina 2021</p>
+  </main>
+  <footer class="footer">
+    <div class="links">
+        <a href="https://github.com/StasyTyapkina" target="_blank">
+            <img src="./src/img/GitHub.png" alt="github_logo" class="github_logo">
+        </a>
+        <a href="https://rs.school/index.html" target="_blank" >
+            <img src="./src/img/rs_school_logo.svg" alt="rs_logo" class="rs_logo">
+        </a>
+    </div>
+    <p class="copyright">Created by A.Tyapkina 2021</p>
   </footer>
   
    <script src="app/bundle.js"></script>    

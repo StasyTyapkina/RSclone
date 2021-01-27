@@ -112,7 +112,7 @@ export default class GameField {
         this.drawNewPosition();
       }
       if (event.code === 'Escape') {
-        this.playGame();
+        this.pauseGame();
       }
     });
   } // end constructor
