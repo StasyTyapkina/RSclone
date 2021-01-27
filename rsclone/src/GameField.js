@@ -13,6 +13,7 @@ export default class GameField {
 
     this.requestID = null;
     this.gameOver = false;
+    this.score = 0;
 
     this.time = {
       start: 0,
@@ -24,14 +25,21 @@ export default class GameField {
 
     this.playBttn = document.querySelector('.play_button');
     this.pauseBttn = document.querySelector('.pause_button');
+    this.restartBttn = document.querySelector('.restart_button');
 
     this.playBttn.addEventListener('click', () => {
       this.playGame();
+      this.restartBttn.style.display = 'block';
     });
 
     this.pauseBttn.addEventListener('click', () => {
       this.pauseGame();
     });
+
+    this.restartBttn.addEventListener('click', () => {
+      this.playGame();
+    });
+
     this.timer = document.getElementById('timer');
     setInterval(() => { this.tick(); }, 1000);
     this.hour = 0;
@@ -210,14 +218,15 @@ export default class GameField {
     if (!this.requestID) {
       this.playBttn.style.display = 'none';
       this.pauseBttn.style.display = 'block';
+      this.pauseBttn.innerHTML = 'Pause';
       this.gameLoop();
       return;
     }
     cancelAnimationFrame(this.requestID);
     this.requestID = null;
 
-    this.playBttn.style.display = 'block';
-    this.pauseBttn.style.display = 'none';
+    this.playBttn.style.display = 'none';
+    this.pauseBttn.innerHTML = 'Continue';
 
     this.context.fillStyle = 'black';
     this.context.fillRect(4, 6, 12, 1.2);
@@ -270,8 +279,11 @@ export default class GameField {
   showGameOver() {
     cancelAnimationFrame(this.requestID);
     this.gameOver = true;
+
     this.playBttn.style.display = '';
     this.pauseBttn.style.display = 'none';
+    this.restartBttn.style.display = 'none';
+
     this.context.fillStyle = 'black';
     this.context.fillRect(4, 6, 12, 1.2);
     this.context.font = '1px Verdana';
