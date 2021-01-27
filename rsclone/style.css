@@ -30,6 +30,12 @@ a:visited{
     --color-blue-light:#94a4ec;
 
 }
+
+.img{
+    position: fixed;
+    width: 200px;
+    margin: 265px 0 0 -350px;
+}
   
 body{
     background: url("./src/img/whiteBackground.jpg") center no-repeat;
