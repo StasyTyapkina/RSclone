@@ -4,6 +4,7 @@ export const close = document.querySelector('.close_bttn');
 
 btn.onclick = function () {
   modal.style.display = 'block';
+  document.querySelector('.video').play();
 };
 
 close.onclick = function () {

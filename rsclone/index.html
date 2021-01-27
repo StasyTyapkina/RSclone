@@ -15,8 +15,6 @@
     <div class="game_field">
         <canvas id="canvas" class="game_board"></canvas>
         <div class="right-column">
-
-          <button class="modal_bttn"><i class="far fa-question-circle"></i></button>
           <div class="modal_container"> 
             <div class="modal_content">
               <div class="modal_header">
@@ -41,11 +39,11 @@
             </div>
           </div>
 
-          <div class="game_info">
-            <canvas class="next_piece"></canvas>
+          <div class="game_info">      
+            <canvas  id="mini_canvas" class="next_piece"></canvas>            
             <p><b>Score:</b> <span id="score">0</span></p>
             <p><b>Time:</b> <span id="timer">00:00:00</span></p>        
-            <p><b>Level:</b> <span id="level">0</span></p>
+            <p><b>Level:</b> <span id="level">0</span></p>            
           </div>
           <button class="play_button bttn">Play</button> 
           <button class="pause_button bttn">Pause</button>
@@ -55,6 +53,7 @@
             <button class="middle right"><i class="fas fa-arrow-alt-circle-right"></i></button>
             <button class="down"><i class="fas fa-arrow-alt-circle-down down" ></i></button>           
           </div>
+          <button class="modal_bttn" title="Как играть"><i class="far fa-question-circle"></i></button>
         </div>
       </div>
   </main>

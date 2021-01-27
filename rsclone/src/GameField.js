@@ -7,7 +7,6 @@ export default class GameField {
   constructor() {
     this.canvas = document.getElementById('canvas');
     this.context = this.canvas.getContext('2d');
-
     this.canvas.width = COLS * BLOCK_SIZE;
     this.canvas.height = ROWS * BLOCK_SIZE;
     this.context.scale(BLOCK_SIZE, BLOCK_SIZE);
@@ -62,7 +61,6 @@ export default class GameField {
       const row = this.tetromino.row + 1;
       if (!this.isValidMove(this.tetromino.shape, row, this.tetromino.col)) {
         this.tetromino.row = row - 1;
-        this.freezeTetromino();
         return;
       }
       this.tetromino.row = row;
@@ -105,7 +103,6 @@ export default class GameField {
         const row = this.tetromino.row + 1;
         if (!this.isValidMove(this.tetromino.shape, row, this.tetromino.col)) {
           this.tetromino.row = row - 1;
-          this.freezeTetromino();
           return;
         }
         this.tetromino.row = row;
@@ -178,6 +175,15 @@ export default class GameField {
         }
       }
     }
+
+    for (let row = this.gameGridLogic.grid.length - 1; row >= 0;) {
+      if (this.gameGridLogic.grid[row].every((cell) => !!cell)) {
+        this.gameGridLogic.grid.splice(row, 1);
+        this.gameGridLogic.grid.unshift(Array(COLS).fill(0));
+      } else {
+        row--;
+      }
+    }
     this.tetromino.getNextTetromino();
   }
 
@@ -189,6 +195,7 @@ export default class GameField {
 
       if (!this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col)) {
         this.tetromino.row--;
+
         this.freezeTetromino();
       }
     }
