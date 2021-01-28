@@ -150,22 +150,10 @@ export default class GameField {
   drawNewPosition() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.tetromino.drawTetromino();
-    this.drawGrid();
+    this.gameGridLogic.drawGrid();
   }
 
-  drawGrid() {
-    this.gameGridLogic.grid.forEach((row, y) => {
-      row.forEach((value, x) => {
-        if (value !== 0) {
-          // если прописать this.context.fillStyle = this.tetromino.color
-          // будет прикольный эффект смены цветов всего поля
 
-          this.context.fillStyle = value;
-          this.context.fillRect(x, y, 0.97, 0.97);
-        }
-      });
-    });
-  }
 
   freezeTetromino() {
     for (let row = 0; row < this.tetromino.shape.length; row++) {
@@ -184,14 +172,7 @@ export default class GameField {
       }
     }
 
-    for (let row = this.gameGridLogic.grid.length - 1; row >= 0;) {
-      if (this.gameGridLogic.grid[row].every((cell) => !!cell)) {
-        this.gameGridLogic.grid.splice(row, 1);
-        this.gameGridLogic.grid.unshift(Array(COLS).fill(0));
-      } else {
-        row--;
-      }
-    }
+    this.gameGridLogic.clearRow();
     this.tetromino.getNextTetromino();
   }
 

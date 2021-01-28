@@ -16,4 +16,26 @@ export default class GameGrid {
       }
     }
   }
+
+  drawGrid() {
+    this.grid.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
+          this.context.fillStyle = value;
+          this.context.fillRect(x, y, 0.97, 0.97);
+        }
+      });
+    });
+  }
+
+  clearRow() {
+    for (let row = this.grid.length - 1; row >= 0;) {
+      if (this.grid[row].every((cell) => !!cell)) {
+        this.grid.splice(row, 1);
+        this.grid.unshift(Array(COLS).fill(0));
+      } else {
+        row--;
+      }
+    }
+  }
 }
