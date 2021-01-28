@@ -29,13 +29,16 @@ export default class GameGrid {
   }
 
   clearRow() {
+    this.clearlines = 0;
     for (let row = this.grid.length - 1; row >= 0;) {
       if (this.grid[row].every((cell) => !!cell)) {
         this.grid.splice(row, 1);
         this.grid.unshift(Array(COLS).fill(0));
+        this.clearlines++;
       } else {
         row--;
       }
     }
+    return this.clearlines;
   }
 }

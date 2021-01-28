@@ -50,3 +50,10 @@ export const COLORS = {
   Z: 'red',
   T: 'fuchsia',
 };
+
+export const POINTS = {
+  one: 10,
+  two: 20,
+  three: 30,
+  four: 40,
+};

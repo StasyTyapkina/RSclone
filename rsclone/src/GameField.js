@@ -1,5 +1,7 @@
 /* eslint-disable no-plusplus */
-import { COLS, ROWS, BLOCK_SIZE } from './constants';
+import {
+  COLS, ROWS, BLOCK_SIZE, POINTS,
+} from './constants';
 import GameGrid from './GameGrid';
 import Tetromino from './tetrominoes';
 
@@ -14,11 +16,13 @@ export default class GameField {
     this.requestID = null;
     this.gameOver = false;
     this.score = 0;
+    this.level = 0;
+    this.lines = 0;
 
     this.time = {
       start: 0,
       elapsed: 0,
-      level: 1000,
+      speed: 1000,
     };
 
     this.gameGridLogic = new GameGrid(this.context);
@@ -45,6 +49,10 @@ export default class GameField {
     this.hour = 0;
     this.min = 0;
     this.sec = 0;
+
+    this.scoreShow = document.getElementById('score');
+    this.levelShow = document.getElementById('level');
+    this.linesShow = document.getElementById('lines');
 
     this.up = document.querySelector('.up');
     this.left = document.querySelector('.left');
@@ -153,8 +161,6 @@ export default class GameField {
     this.gameGridLogic.drawGrid();
   }
 
-
-
   freezeTetromino() {
     for (let row = 0; row < this.tetromino.shape.length; row++) {
       for (let col = 0; col < this.tetromino.shape[row].length; col++) {
@@ -173,12 +179,14 @@ export default class GameField {
     }
 
     this.gameGridLogic.clearRow();
+    this.updateScore();
+    this.updateLevel();
     this.tetromino.getNextTetromino();
   }
 
   gameLoop(now = 0) {
     this.time.elapsed = now - this.time.start;
-    if (this.time.elapsed > this.time.level) {
+    if (this.time.elapsed > this.time.speed) {
       this.tetromino.row++;
       this.time.start = now;
 
@@ -214,6 +222,43 @@ export default class GameField {
     this.context.font = '1px Verdana';
     this.context.fillStyle = 'red';
     this.context.fillText('PAUSE', 3, 4);
+  }
+
+  updateScore() {
+    switch (this.gameGridLogic.clearlines) {
+      case 1:
+        this.score += POINTS.one;
+        this.lines += 1;
+        break;
+
+      case 2:
+        this.score += POINTS.two;
+        this.lines += 2;
+        break;
+
+      case 3:
+        this.score += POINTS.three;
+        this.lines += 3;
+        break;
+      case 4:
+        this.score += POINTS.four;
+        this.lines += 4;
+        break;
+      default:
+    }
+    this.scoreShow.innerHTML = `${this.score}`;
+  }
+
+  updateLevel() {
+    const checkedLines = 10;
+    if (this.lines >= checkedLines) {
+      this.level++;
+      this.time.speed -= 100;
+      this.lines -= checkedLines;
+    }
+
+    this.levelShow.innerHTML = `${this.level}`;
+    this.linesShow.innerHTML = checkedLines - `${this.lines}`;
   }
 
   resetTime() {
