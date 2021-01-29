@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-plusplus */
 import {
   COLS, ROWS, BLOCK_SIZE, POINTS,
@@ -103,10 +104,13 @@ export default class GameField {
         this.drawNewPosition();
       }
       if (event.code === 'ArrowUp') {
-        this.tetromino.rotateTetromino();
-        if (!this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col)) {
-          return;
+        const clone = Object.assign(Object.create(Object.getPrototypeOf(this.tetromino)), this.tetromino);
+
+        clone.rotateTetromino();
+        if (this.isValidMove(clone.shape, clone.row, clone.col)) {
+          this.tetromino.rotateTetromino();
         }
+
         this.drawNewPosition();
       }
       if (event.code === 'ArrowRight') {
