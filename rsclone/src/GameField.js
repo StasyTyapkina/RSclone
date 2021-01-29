@@ -85,11 +85,7 @@ export default class GameField {
     });
 
     this.up.addEventListener('click', () => {
-      this.tetromino.rotateTetromino();
-      if (!this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col)) {
-        return;
-      }
-      this.drawNewPosition();
+      this.handleRotate();
     });
 
     document.addEventListener('keydown', (event) => {
@@ -104,14 +100,7 @@ export default class GameField {
         this.drawNewPosition();
       }
       if (event.code === 'ArrowUp') {
-        const clone = Object.assign(Object.create(Object.getPrototypeOf(this.tetromino)), this.tetromino);
-
-        clone.rotateTetromino();
-        if (this.isValidMove(clone.shape, clone.row, clone.col)) {
-          this.tetromino.rotateTetromino();
-        }
-
-        this.drawNewPosition();
+        this.handleRotate();
       }
       if (event.code === 'ArrowRight') {
         if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col + 1)) {
@@ -137,6 +126,7 @@ export default class GameField {
   playGame() {
     this.tetromino = new Tetromino(this.context);
     this.gameGridLogic.createGrid();
+    this.gameOver = false;
     this.resetTime();
     this.gameLoop();
     this.playBttn.style.display = 'none';
@@ -156,6 +146,16 @@ export default class GameField {
       }
     }
     return true;
+  }
+
+  handleRotate() {
+    const clone = Object.assign(Object.create(Object.getPrototypeOf(this.tetromino)), this.tetromino);
+
+    clone.rotateTetromino();
+    if (this.isValidMove(clone.shape, clone.row, clone.col)) {
+      this.tetromino.rotateTetromino();
+    }
+    this.drawNewPosition();
   }
 
   drawNewPosition() {
@@ -308,7 +308,6 @@ export default class GameField {
   showGameOver() {
     cancelAnimationFrame(this.requestID);
     this.gameOver = true;
-
     this.playBttn.style.display = '';
     this.pauseBttn.style.display = 'none';
     this.restartBttn.style.display = 'none';
