@@ -11,6 +11,7 @@ export function toggleSound() {
 export const audio = document.createElement('audio');
 audio.id = 'audio';
 audio.src = './src/sounds/main.mp3';
+audio.loop = true
 
 document.body.appendChild(audio);
 
