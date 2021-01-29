@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import { COLS, ROWS } from './constants';
+import { COLS, ROWS, BLOCK_SIZE } from './constants';
 
 export default class GameGrid {
   constructor(context) {

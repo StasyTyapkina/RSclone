@@ -135,7 +135,6 @@ export default class GameField {
     this.gameGridLogic.createGrid();
     this.resetTime();
     this.gameLoop();
-
     this.playBttn.style.display = 'none';
     this.pauseBttn.style.display = 'block';
   }

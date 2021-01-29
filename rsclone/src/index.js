@@ -1,2 +1,3 @@
 import GameField from './GameField';
-import { modal, btn, close } from './modal';
+import * as modal from './modal';
+import * as sound from './sound';
