@@ -14,12 +14,12 @@ export default class GameField {
     this.canvas.height = ROWS * BLOCK_SIZE;
     this.context.scale(BLOCK_SIZE, BLOCK_SIZE);
 
-    this.canvasNext = document.getElementById('mini_canvas');
-    this.ctxNext = this.canvasNext.getContext('2d');
+    this.canvasNextTetro = document.getElementById('mini_canvas');
+    this.contextNextTetro = this.canvasNextTetro.getContext('2d');
 
-    this.ctxNext.canvas.width = 4 * BLOCK_SIZE;
-    this.ctxNext.canvas.height = 4 * BLOCK_SIZE;
-    this.ctxNext.scale(BLOCK_SIZE, BLOCK_SIZE);
+    this.contextNextTetro.canvas.width = 4 * BLOCK_SIZE;
+    this.contextNextTetro.canvas.height = 4 * BLOCK_SIZE;
+    this.contextNextTetro.scale(BLOCK_SIZE, BLOCK_SIZE);
 
     this.requestID = null;
     this.gameOver = false;
@@ -51,6 +51,7 @@ export default class GameField {
     });
 
     this.restartBttn.addEventListener('click', () => {
+      this.resetReward();
       this.stopTime();
       this.playGame();
 
@@ -139,22 +140,15 @@ export default class GameField {
 
   playGame() {
     this.tetromino = new Tetromino(this.context);
-    this.getNewPiece();
+    this.showNextTetro();
     this.gameGridLogic.createGrid();
     this.gameOver = false;
     this.resetTime();
+    this.resetReward();
     this.gameLoop();
     this.startTickClock();
     this.playBttn.style.display = 'none';
     this.pauseBttn.style.display = 'block';
-  }
-
-  startTickClock() {
-    this.timerID = setInterval(() => this.tick(), 1000);
-  }
-
-  stopTime() {
-    clearInterval(this.timerID);
   }
 
   isValidMove(matrix, gridRow, gridCol) {
@@ -188,12 +182,12 @@ export default class GameField {
     this.gameGridLogic.drawLastPosition();
   }
 
-  getNewPiece() {
-    this.next = new Tetromino(this.ctxNext);
-    this.ctxNext.clearRect(0, 0, this.ctxNext.canvas.width, this.ctxNext.canvas.height);
-    this.next.col = 0;
-    this.next.row = 0;
-    this.next.drawTetromino();
+  showNextTetro() {
+    this.nextTetro = new Tetromino(this.contextNextTetro);
+    this.contextNextTetro.clearRect(0, 0, this.contextNextTetro.canvas.width, this.contextNextTetro.canvas.height);
+    this.nextTetro.col = 0;
+    this.nextTetro.row = 0;
+    this.nextTetro.drawTetromino();
   }
 
   freezeTetromino() {
@@ -229,10 +223,10 @@ export default class GameField {
 
         this.freezeTetromino();
 
-        this.next.getNextTetromino();
-        this.tetromino = this.next;
+        this.nextTetro.getNextTetromino();
+        this.tetromino = this.nextTetro;
         this.tetromino.context = this.context;
-        this.getNewPiece();
+        this.showNextTetro();
       }
     }
 
@@ -266,6 +260,14 @@ export default class GameField {
     this.context.font = '1px Verdana';
     this.context.fillStyle = 'red';
     this.context.fillText('PAUSE', 3, 4);
+  }
+
+  startTickClock() {
+    this.timerID = setInterval(() => this.tick(), 1000);
+  }
+
+  stopTime() {
+    clearInterval(this.timerID);
   }
 
   pauseTime() {
@@ -317,6 +319,16 @@ export default class GameField {
     this.hour = 0;
     this.min = 0;
     this.sec = 0;
+  }
+
+  resetReward() {
+    this.level = 0;
+    this.score = 0;
+    this.lines = 0;
+    this.time.speed = 1000;
+    this.levelShow.innerHTML = '0';
+    this.linesShow.innerHTML = '10';
+    this.scoreShow.innerHTML = '0';
   }
 
   tick() {
