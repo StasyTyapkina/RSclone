@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import { COLS, ROWS, BLOCK_SIZE } from './constants';
+import { COLS, ROWS } from './constants';
 
 export default class GameGrid {
   constructor(context) {
@@ -17,7 +17,7 @@ export default class GameGrid {
     }
   }
 
-  drawGrid() {
+  drawLastPosition() {
     this.grid.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value !== 0) {

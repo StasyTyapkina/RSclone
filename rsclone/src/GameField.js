@@ -14,11 +14,19 @@ export default class GameField {
     this.canvas.height = ROWS * BLOCK_SIZE;
     this.context.scale(BLOCK_SIZE, BLOCK_SIZE);
 
+    this.canvasNext = document.getElementById('mini_canvas');
+    this.ctxNext = this.canvasNext.getContext('2d');
+
+    this.ctxNext.canvas.width = 4 * BLOCK_SIZE;
+    this.ctxNext.canvas.height = 4 * BLOCK_SIZE;
+    this.ctxNext.scale(BLOCK_SIZE, BLOCK_SIZE);
+
     this.requestID = null;
     this.gameOver = false;
     this.score = 0;
     this.level = 0;
     this.lines = 0;
+    this.isPaused = false;
 
     this.time = {
       start: 0,
@@ -39,14 +47,19 @@ export default class GameField {
 
     this.pauseBttn.addEventListener('click', () => {
       this.pauseGame();
+      this.pauseTime();
     });
 
     this.restartBttn.addEventListener('click', () => {
+      this.stopTime();
       this.playGame();
+
+      if (this.isPaused) {
+        this.pauseBttn.innerHTML = 'Pause';
+      }
     });
 
     this.timer = document.getElementById('timer');
-    setInterval(() => { this.tick(); }, 1000);
     this.hour = 0;
     this.min = 0;
     this.sec = 0;
@@ -119,18 +132,29 @@ export default class GameField {
       }
       if (event.code === 'Escape') {
         this.pauseGame();
+        this.pauseTime();
       }
     });
   } // end constructor
 
   playGame() {
     this.tetromino = new Tetromino(this.context);
+    this.getNewPiece();
     this.gameGridLogic.createGrid();
     this.gameOver = false;
     this.resetTime();
     this.gameLoop();
+    this.startTickClock();
     this.playBttn.style.display = 'none';
     this.pauseBttn.style.display = 'block';
+  }
+
+  startTickClock() {
+    this.timerID = setInterval(() => this.tick(), 1000);
+  }
+
+  stopTime() {
+    clearInterval(this.timerID);
   }
 
   isValidMove(matrix, gridRow, gridCol) {
@@ -161,7 +185,15 @@ export default class GameField {
   drawNewPosition() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.tetromino.drawTetromino();
-    this.gameGridLogic.drawGrid();
+    this.gameGridLogic.drawLastPosition();
+  }
+
+  getNewPiece() {
+    this.next = new Tetromino(this.ctxNext);
+    this.ctxNext.clearRect(0, 0, this.ctxNext.canvas.width, this.ctxNext.canvas.height);
+    this.next.col = 0;
+    this.next.row = 0;
+    this.next.drawTetromino();
   }
 
   freezeTetromino() {
@@ -184,7 +216,6 @@ export default class GameField {
     this.gameGridLogic.clearRow();
     this.updateScore();
     this.updateLevel();
-    this.tetromino.getNextTetromino();
   }
 
   gameLoop(now = 0) {
@@ -197,6 +228,11 @@ export default class GameField {
         this.tetromino.row--;
 
         this.freezeTetromino();
+
+        this.next.getNextTetromino();
+        this.tetromino = this.next;
+        this.tetromino.context = this.context;
+        this.getNewPiece();
       }
     }
 
@@ -212,19 +248,32 @@ export default class GameField {
       this.pauseBttn.style.display = 'block';
       this.pauseBttn.innerHTML = 'Pause';
       this.gameLoop();
+      this.isPaused = false;
       return;
     }
     cancelAnimationFrame(this.requestID);
     this.requestID = null;
-
+    this.isPaused = true;
     this.playBttn.style.display = 'none';
     this.pauseBttn.innerHTML = 'Continue';
 
+    this.showPause();
+  }
+
+  showPause() {
     this.context.fillStyle = 'black';
     this.context.fillRect(4, 6, 12, 1.2);
     this.context.font = '1px Verdana';
     this.context.fillStyle = 'red';
     this.context.fillText('PAUSE', 3, 4);
+  }
+
+  pauseTime() {
+    if (this.isPaused) {
+      this.stopTime();
+    } else {
+      this.startTickClock();
+    }
   }
 
   updateScore() {
@@ -311,6 +360,7 @@ export default class GameField {
     this.playBttn.style.display = '';
     this.pauseBttn.style.display = 'none';
     this.restartBttn.style.display = 'none';
+    this.stopTime();
 
     this.context.fillStyle = 'black';
     this.context.fillRect(4, 6, 12, 1.2);

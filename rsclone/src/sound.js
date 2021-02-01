@@ -17,7 +17,7 @@ document.body.appendChild(audioMusic);
 
 const audioSound = document.createElement('audio');
 audioSound.id = 'audio_sound';
-audioSound.src = '';
+audioSound.src = './src/sounds/tink.mp3';
 audioSound.volume = 0.4;
 document.body.appendChild(audioSound);
 
@@ -31,10 +31,17 @@ buttonSound.addEventListener('click', () => {
 
   if (buttonSound.sound) {
     audioMusic.play();
+    audioSound.play();
     buttonSound.innerHTML = '<i class="fas fa-volume-up"></i>';
   } else {
     audioMusic.pause();
     buttonSound.innerHTML = '<i class="fas fa-volume-off">';
+  }
+});
+
+document.addEventListener('click', () => {
+  if (buttonSound.sound) {
+    audioSound.play();
   }
 });
 

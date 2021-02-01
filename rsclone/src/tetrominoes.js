@@ -5,7 +5,7 @@ export default class Tetromino {
   constructor(context) {
     this.context = context;
     this.tetrominoOrder = [];
-    this.extractTetromino();
+    this.tetrominoName = this.extractTetromino();
     this.tetrominoObj = this.getNextTetromino();
   }
 
@@ -26,31 +26,23 @@ export default class Tetromino {
 
   // eslint-disable-next-line class-methods-use-this
   getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max + 1 - min)) + min;
   }
 
   extractTetromino() {
     const order = ['I', 'J', 'L', 'O', 'S', 'Z', 'T'];
-
-    while (order.length) {
-      const randomIndex = this.getRandomInt(0, order.length - 1);
-      const tetrominoName = order.splice(randomIndex, 1)[0];
-      this.tetrominoOrder.push(tetrominoName);
-    }
+    const randomIndex = this.getRandomInt(0, order.length - 1);
+    return order[randomIndex];
   }
 
   getNextTetromino() {
-    if (this.tetrominoOrder.length === 0) {
-      this.extractTetromino();
-    }
-    const tetrominoName = this.tetrominoOrder.pop();
-    this.shape = TETROMINOES[tetrominoName];
-    this.color = COLORS[tetrominoName];
+    this.shape = TETROMINOES[this.tetrominoName];
+    this.color = COLORS[this.tetrominoName];
     this.col = COLS / 2 - Math.round(this.shape[0].length / 2);
     this.row = 0;
 
     return {
-      tetrominoName,
+      tetrominoName: this.tetrominoName,
       shape: this.shape,
       color: this.color,
       row: this.row,
