@@ -17,20 +17,20 @@
         <canvas id="canvas" class="game_board"></canvas>
         <div class="right-column">
 
-          <div class="modal_container"> 
+          <div class="modal_container help_container"> 
             <div class="modal_content">
               <div class="modal_header">
-                <span class="close_bttn">×</span>
-                <h2>Welcome to TETRIS!</h2>
+                <i class="far fa-window-close close_bttn help_container_close_bttn"></i>
+                <h2 class="welcome_inner">Welcome to TETRIS!</h2>
               </div>
               <div class="modal_main">
-                <h3>Приветствую тебя, дорогой игрок!</h3>
-                <p>Для управления тетрамино ты можешь использовать клавиатуру: <br>
-                  🠉 перевернуть фигуру <br>
-                🠈 🠊 движение влево / вправо <br>
-                  🠋 ускорение падения тетрамино<br>
-                Esc - пауза <br>
-                   или воспользоваться кнопками управления на твоем экране. 
+                <h3>Hello dear players!</h3>
+                <p>To control the tetromino you can use the keyboard: <br>
+                  🠉 flip the figure <br>
+                🠈 🠊 movement left / right <br>
+                  🠋 acceleration of falling tetromino<br>
+                Esc - pause <br>
+                or use the control buttons on the screen. 
                 </p>
               </div>
               <div class="modal_footer">
@@ -58,8 +58,45 @@
             <button class="down"><i class="fas fa-arrow-alt-circle-down down" ></i></button>           
           </div>
           <button class="setup_button bttn">Setup</button>
-          <button class="modal_bttn" title="Как играть"><i class="far fa-question-circle"></i></button>
+          <button class="help_bttn" title="How to play"><i class="far fa-question-circle"></i></button>
           <button class="sound_bttn"><i class="fas fa-volume-off"></i></button>
+
+          <div class="modal_container setup_container"> 
+            <div class="modal_content">
+              <div class="modal_header">
+                <i class="far fa-window-close close_bttn setup_container_close_bttn"></i>
+                <h2 class="setup_inner">Game settings</h2>
+              </div>
+
+              <div class="modal_main">
+
+                <div class="lang_changer">
+                  <label for="lang" class="lang_label">Language</label>
+                  <select class="language" id="lang">
+                      <option value="en" selected="">English</option>
+                      <option value="ru">Русский</option>
+                  </select>
+                </div>
+
+                <div class="music_control">
+                  <i class="fas fa-music" title="Music volume"></i>
+                  <input title="Music volume" type="range" min="0" max="1" step="0.05" value="0.4" class="music_control_slider">
+                  <span class="music_value">40%</span>
+                </div>
+
+                <div class="sound_сontrol">                
+                  <i class="fas fa-volume-up" title="Sound volume"></i>
+                  <input title="Sound volume" type="range" min="0" max="1" step="0.05" value="0.4" class="sound_control_slider">
+                  <span class="sounds_value">40%</span>
+                </div>
+
+              </div>
+
+              <div class="modal_footer">
+                <button class="save_button bttn">Save settings</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
   </main>

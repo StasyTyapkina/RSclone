@@ -66,7 +66,7 @@ body{
 }
 
 .bttn:hover, 
-.modal_bttn:hover,
+.help_bttn:hover,
 .sound_bttn:hover{
     background-color: var(--color-grey-light);
 }
@@ -74,6 +74,11 @@ body{
 .pause_button,
 .restart_button{
     display: none;
+}
+
+.save_button{
+    width: 150px;
+    padding: 5px;
 }
 
 .img{
@@ -85,7 +90,7 @@ body{
 
 /*modal*/
 
-.modal_bttn,
+.help_bttn,
 .sound_bttn{ 
     background-color: var(--color-blue-light);
     width: 40px;
@@ -171,6 +176,20 @@ body{
 .video{
     width: 90%;
     height: 100%;
+}
+
+.lang_changer{
+    margin: 15px 0 30px;
+}
+.lang_label{
+    padding-right: 10px;
+    font-size: 18px;
+}
+
+.music_control,
+.sound_сontrol{
+    font-size: 16px;
+    margin: 0 0 15px;
 }
 
 /*game control*/
