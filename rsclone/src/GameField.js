@@ -234,6 +234,11 @@ export default class GameField {
       this.drawNewPosition();
       this.requestID = requestAnimationFrame(this.gameLoop.bind(this));
     }
+
+    if (document.querySelector('.help_container').style.display === 'block' || document.querySelector('.setup_container').style.display === 'block') {
+      this.pauseGame();
+      this.pauseTime();
+    }
   }
 
   pauseGame() {
