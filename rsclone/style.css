@@ -12,15 +12,15 @@ video {
 }
 
 :root{
-    font-family: 'Fraunces', serif;
+    font-family: 'Yusei Magic', sans-serif;
     font-weight: 400;
-    
     --color-black: #000000;
     --color-grey: #545454;
     --color-grey-light: #acacac;
     --color-light: #FFFFFF;
     --color-blue:#1936b8;
     --color-blue-light:#94a4ec;
+    --color-blue-green-light:#59d4f0 ;
 }
 
 a,
@@ -36,6 +36,11 @@ body{
     width: 100%;
 }
 
+h1{
+    font-size: 0px; 
+    margin: 0px;
+}
+
 .game_field {
     display: flex;
     justify-content: center;
@@ -49,12 +54,24 @@ body{
     margin: 0 15px 0;
 }
 
-.right-column {
+.right_column{
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
     align-items: center;
+}
+
+.left_column{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+    align-items: center;
+}
+
+li{
+    padding-top: 5px;
 }
 
 .bttn{
@@ -84,7 +101,7 @@ body{
 .img{
     position: fixed;
     width: 200px;
-    margin: 260px 0 0 -280px;
+    margin: 260px 0 0 -220px;
 }
 
 .next_tetro{
@@ -130,18 +147,20 @@ body{
     background-color: rgba(0,0,0,0.5);
     z-index: 10;
     overflow: hidden; 
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 .modal_content {
     position: relative;
-    background-color: var(--color-light);
+    background: linear-gradient(90deg, var(--color-blue-green-light)0%, var(--color-blue-light) 100%);
     margin: auto;
     padding: 0;
-    border: 2px solid  var(--color-blue-light);
-    width: 50%;
+    border: 1px solid  var(--color-blue);
+    width: 50%;   
     animation-name: animate;
-    animation-duration: 0.5s
+    animation-duration: 0.5s;
+    align-items: center;
+    border-radius: 10px;
 }
 
 @keyframes animate {
@@ -164,8 +183,8 @@ body{
 
 .modal_header {
     padding: 15px 15px;
-    background-color: var(--color-blue-light);
     color: var(--color-light);
+    font-size: 18px;
 }
 
 .modal_main {
@@ -194,6 +213,7 @@ body{
     font-size: 16px;
     margin: 0 0 15px;
 }
+
 
 /*game control*/
 
@@ -267,13 +287,17 @@ body{
         margin: 0;
     }
 
-    .right-column {
+    .right_column {
         margin-left: 10px ;
         text-align: start;
         align-items: normal;
         font-size: 13px;
     }
 
+    .left_column {
+        margin-right: 10px;
+    }
+        
     .game_control {
         padding: 0; 
     }

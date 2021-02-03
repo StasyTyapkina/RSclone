@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable max-len */
 /* eslint-disable no-plusplus */
 import {
@@ -16,17 +17,16 @@ export default class GameField {
 
     this.canvasNextTetro = document.getElementById('mini_canvas');
     this.contextNextTetro = this.canvasNextTetro.getContext('2d');
-
     this.contextNextTetro.canvas.width = 4 * BLOCK_SIZE;
     this.contextNextTetro.canvas.height = 4 * BLOCK_SIZE;
     this.contextNextTetro.scale(BLOCK_SIZE, BLOCK_SIZE);
 
     this.requestID = null;
     this.gameOver = false;
+    this.isPaused = false;
     this.score = 0;
     this.level = 0;
     this.lines = 0;
-    this.isPaused = false;
 
     this.time = {
       start: 0,
@@ -75,6 +75,9 @@ export default class GameField {
     this.down = document.querySelector('.down');
 
     this.left.addEventListener('click', () => {
+      if (this.requestID === null || this.gameOver === true) {
+        return;
+      }
       if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col - 1)) {
         this.tetromino.col -= 1;
       }
@@ -82,6 +85,9 @@ export default class GameField {
     });
 
     this.right.addEventListener('click', () => {
+      if (this.requestID === null || this.gameOver === true) {
+        return;
+      }
       if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col + 1)) {
         this.tetromino.col += 1;
       }
@@ -89,6 +95,9 @@ export default class GameField {
     });
 
     this.down.addEventListener('click', () => {
+      if (this.requestID === null || this.gameOver === true) {
+        return;
+      }
       const row = this.tetromino.row + 1;
       if (!this.isValidMove(this.tetromino.shape, row, this.tetromino.col)) {
         this.tetromino.row = row - 1;
@@ -99,13 +108,18 @@ export default class GameField {
     });
 
     this.up.addEventListener('click', () => {
+      if (this.requestID === null || this.gameOver === true) {
+        return;
+      }
       this.handleRotate();
     });
 
     document.addEventListener('keydown', (event) => {
       event.preventDefault();
 
-      if (this.gameOver) return;
+      if (this.gameOver) {
+        return;
+      }
 
       if (event.code === 'ArrowLeft') {
         if (this.isValidMove(this.tetromino.shape, this.tetromino.row, this.tetromino.col - 1)) {
@@ -136,6 +150,8 @@ export default class GameField {
         this.pauseTime();
       }
     });
+
+    this.showBestResult();
   } // end constructor
 
   playGame() {
@@ -256,10 +272,10 @@ export default class GameField {
     this.playBttn.style.display = 'none';
     this.pauseBttn.innerHTML = 'Continue';
 
-    this.showPause();
+    this.drawPause();
   }
 
-  showPause() {
+  drawPause() {
     this.context.fillStyle = 'black';
     this.context.fillRect(4, 6, 12, 1.2);
     this.context.font = '1px Verdana';
@@ -320,12 +336,6 @@ export default class GameField {
     this.linesShow.innerHTML = checkedLines - `${this.lines}`;
   }
 
-  resetTime() {
-    this.hour = 0;
-    this.min = 0;
-    this.sec = 0;
-  }
-
   resetReward() {
     this.level = 0;
     this.score = 0;
@@ -334,6 +344,12 @@ export default class GameField {
     this.levelShow.innerHTML = '0';
     this.linesShow.innerHTML = '10';
     this.scoreShow.innerHTML = '0';
+  }
+
+  resetTime() {
+    this.hour = 0;
+    this.min = 0;
+    this.sec = 0;
   }
 
   tick() {
@@ -378,12 +394,51 @@ export default class GameField {
     this.pauseBttn.style.display = 'none';
     this.restartBttn.style.display = 'none';
     this.stopTime();
+    this.drawGameOver();
+    this.drawScore();
+    this.checkBestResult(this.score);
+  }
 
+  drawGameOver() {
     this.context.fillStyle = 'black';
     this.context.fillRect(4, 6, 12, 1.2);
     this.context.font = '1px Verdana';
     this.context.fillStyle = 'white';
-    this.context.fillText('GAME OVER', 1.8, 7);
+    this.context.fillText('GAME OVER', 1.9, 7);
+  }
+
+  drawScore() {
+    this.context.font = '1px Verdana';
+    this.context.fillStyle = 'white';
+    this.context.fillText(`Your score: ${this.score}`, 1.6, 10);
+  }
+
+  checkBestResult(score) {
+    const lowestScore = this.bestResult[3 - 1]?.score ?? 0;
+
+    if (score > lowestScore) {
+      const name = prompt('You got the best result!', 'Enter your name');
+      const newScore = { score, name };
+      this.saveGameScore(newScore);
+      this.showBestResult();
+    }
+  }
+
+  showBestResult() {
+    this.bestResult = JSON.parse(localStorage.getItem('bestResult')) || [];
+    const bestResultList = document.querySelector('.best_result');
+
+    bestResultList.innerHTML = this.bestResult
+      .map((score) => `<li>${score.score} - ${score.name}`)
+      .join('');
+  }
+
+  saveGameScore(score) {
+    this.bestResult.push(score);
+    this.bestResult.sort((a, b) => b.score - a.score);
+    this.bestResult.splice(3);
+
+    localStorage.setItem('bestResult', JSON.stringify(this.bestResult));
   }
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-plusplus */
 import { TETROMINOES, COLORS, COLS } from './constants';
 
@@ -24,7 +25,6 @@ export default class Tetromino {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getRandomInt(min, max) {
     return Math.floor(Math.random() * (max + 1 - min)) + min;
   }
